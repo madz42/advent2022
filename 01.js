@@ -15,7 +15,7 @@ const getInput = (id) => {
 const file = getInput("01");
 const arr = file.split(/\r?\n/);
 let cur = 0;
-const sum = [[]];
+let sum = [[]];
 for (let i = 0; i < arr.length; i++) {
   if (arr[i]) {
     sum[cur].push(parseInt(arr[i]));
@@ -24,8 +24,11 @@ for (let i = 0; i < arr.length; i++) {
     sum.push([]);
   }
 }
+// console.log(sum.length);
+sum = sum.filter((e) => e.length > 0);
+// console.log(sum.length);
 let q = sum.map((a) => {
-  return a.reduce((s, e) => s + e, 0);
+  return a.reduce((s, e) => s + e);
 });
 console.log("Part 1:");
 console.log(Math.max(...q));
