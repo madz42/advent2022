@@ -21,12 +21,11 @@ const decodeCommand = (arr) => {
       curDir = getParent.parent;
       curLvl--;
     } else if (arr[2] === "/") {
-      //go root id 0
+      //go root, id 0
       curDir = 0;
       curLvl = 0;
     } else {
-      //enter dir
-      //arr[2]
+      //enter dir, arr[2] - name
       const currentDirectory = disk.find((x) => x.id === curDir);
       currentDirectory.content.forEach((x) => {
         const dir = disk.find((z) => z.id === x);
@@ -37,7 +36,7 @@ const decodeCommand = (arr) => {
       });
     }
   } else if (arr[1] === "ls") {
-    //ignore list command log
+    //ignore list command
   }
 };
 
@@ -53,6 +52,7 @@ const addFile = (arr) => {
     level: curLvl + 1,
   };
   disk.push(file);
+  //add new content to parent
   disk = disk.map((x) => {
     if (x.id === curDir) {
       return { ...x, content: [...x.content, curId] };
@@ -81,7 +81,6 @@ const addDir = (arr) => {
 };
 
 const decodeLine = (line) => {
-  //   console.log(curDir);
   const arr = line.split(" ");
   if (arr[0] === "$") {
     //command
@@ -106,7 +105,6 @@ const smallestToDelete = (require) => {
 };
 
 const getDirsSmaller = (topsize) => {
-  const maxLvl = Math.max(...disk.map((x) => x.level));
   const pack = disk.filter((x) => x.content !== "file" && x.size <= topsize);
   return pack.map((x) => x.size).reduce((s, e) => s + e);
 };
@@ -129,7 +127,7 @@ const calcAllSizes = () => {
 //MAIN
 const file = getInput("07");
 const input = file.split(/\r?\n/).filter((x) => x.length > 0);
-//parse input
+//prep fs
 let disk = [];
 disk.push({
   id: 0,
@@ -142,6 +140,7 @@ disk.push({
 let curDir = 0;
 let curId = 0;
 let curLvl = 0;
+//run through log
 input.forEach((l) => decodeLine(l));
 calcAllSizes();
 // console.log(disk);
