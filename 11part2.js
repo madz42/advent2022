@@ -1,5 +1,5 @@
 // https://adventofcode.com/2022/day/11
-// part1
+// part2
 
 const fs = require("fs");
 
@@ -14,6 +14,10 @@ const getInput = (id) => {
   }
 };
 
+const findDiv = (arr) => {
+  return arr.reduce((s, e) => s * e);
+};
+
 //MAIN
 const file = getInput("11");
 const input = file.split(/\r?\n/).filter((x) => x.length > 0);
@@ -21,7 +25,7 @@ const input = file.split(/\r?\n/).filter((x) => x.length > 0);
 // console.log(input);
 const totalMonkeys = input.length / 6;
 let monkeys = [];
-const rounds = 20;
+const rounds = 10000;
 // console.log(totalMonkeys);
 //parse input
 for (let i = 0; i < totalMonkeys; i++) {
@@ -48,6 +52,8 @@ for (let i = 0; i < totalMonkeys; i++) {
 }
 // console.log(monkeys);
 //run rounds
+const div = findDiv(monkeys.map((x) => x.divide));
+// console.log(div);
 for (let i = 0; i < rounds; i++) {
   for (let j = 0; j < totalMonkeys; j++) {
     const { action, value, divide, ifTrue, ifFalse } = monkeys[j];
@@ -63,9 +69,11 @@ for (let i = 0; i < rounds; i++) {
         if (action === "mult") newItem = item * value;
       }
       //unworry
-      newItem = Math.floor(newItem / 3);
+      // newItem = Math.floor(newItem / 3);
+      newItem = newItem % div;
+      // console.log(newItem);
       //test
-      console.log(newItem);
+      //   console.log(newItem);
       if (newItem % divide === 0) {
         monkeys[ifTrue].items.push(newItem);
       } else {
@@ -76,9 +84,9 @@ for (let i = 0; i < rounds; i++) {
     monkeys[j].items = [];
   }
 }
-// console.log("After", rounds, "rounds");
+console.log("After", rounds, "rounds");
 // console.log(monkeys);
 monkeys.sort((a, b) => b.inspected - a.inspected);
-// console.log(monkeys);
+console.log(monkeys.map((m) => m.inspected));
 console.log("Part I:");
 console.log(monkeys[0].inspected * monkeys[1].inspected);
