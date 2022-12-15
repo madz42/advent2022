@@ -22,8 +22,7 @@ const checkFall = (x, y) => {
 
 const simSand = (x, y) => {
   //start @x,y
-  let stop = false;
-  while (!stop) {
+  while (true) {
     switch (checkFall(x, y + 1)) {
       case true:
         y++;
@@ -43,7 +42,6 @@ const simSand = (x, y) => {
               case false:
                 //stopped
                 // cave[x][y] = "o";
-                stop = true;
                 return [x, y];
                 break;
               case "abyss":
